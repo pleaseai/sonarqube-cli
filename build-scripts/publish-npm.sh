@@ -25,11 +25,17 @@ PLATFORM_PACKAGES=(
   "sonarqube-win32-x64"
 )
 
-# Step 1: Build all platform binaries
+# Step 1: Install submodule dependencies
+# Use public npm registry to bypass SonarSource's private Artifactory (bunfig.toml)
+echo "==> Installing submodule dependencies..."
+npm install --prefix "$PROJECT_ROOT/sonarqube-cli" --registry https://registry.npmjs.org
+
+# Step 2: Build all platform binaries
+echo ""
 echo "==> Building all platform binaries..."
 bun "$SCRIPT_DIR/build-npm.ts"
 
-# Step 2: Publish platform packages
+# Step 3: Publish platform packages
 echo ""
 echo "==> Publishing platform packages..."
 for pkg in "${PLATFORM_PACKAGES[@]}"; do
@@ -41,7 +47,7 @@ for pkg in "${PLATFORM_PACKAGES[@]}"; do
   fi
 done
 
-# Step 3: Publish main package last
+# Step 4: Publish main package last
 echo ""
 echo "==> Publishing main package @pleaseai/sonarqube..."
 if [[ "$DRY_RUN" == true ]]; then
