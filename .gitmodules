@@ -1,0 +1,3 @@
+[submodule "sonarqube-cli"]
+	path = sonarqube-cli
+	url = https://github.com/SonarSource/sonarqube-cli

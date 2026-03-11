@@ -1,0 +1,5 @@
+node_modules/
+*.log
+.DS_Store
+npm/sonarqube-*/bin/sonar
+npm/sonarqube-*/bin/sonar.exe

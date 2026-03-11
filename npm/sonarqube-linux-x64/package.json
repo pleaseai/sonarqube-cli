@@ -1,0 +1,15 @@
+{
+  "name": "@pleaseai/sonarqube-linux-x64",
+  "version": "0.6.0",
+  "description": "SonarQube CLI binary for Linux x64",
+  "license": "LGPL-3.0-or-later",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "bin": {
+    "sonar": "bin/sonar"
+  }
+}
