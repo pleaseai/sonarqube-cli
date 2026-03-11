@@ -1,16 +1,16 @@
 {
   "name": "@pleaseai/sonarqube",
-  "version": "0.6.0",
+  "version": "0.5.0",
   "description": "SonarQube CLI - integrates SonarQube into developer workflows",
   "license": "LGPL-3.0-or-later",
   "bin": {
     "sonar": "bin/sonar"
   },
   "optionalDependencies": {
-    "@pleaseai/sonarqube-darwin-arm64": "0.6.0",
-    "@pleaseai/sonarqube-darwin-x64": "0.6.0",
-    "@pleaseai/sonarqube-linux-arm64": "0.6.0",
-    "@pleaseai/sonarqube-linux-x64": "0.6.0",
-    "@pleaseai/sonarqube-win32-x64": "0.6.0"
+    "@pleaseai/sonarqube-darwin-arm64": "0.5.0",
+    "@pleaseai/sonarqube-darwin-x64": "0.5.0",
+    "@pleaseai/sonarqube-linux-arm64": "0.5.0",
+    "@pleaseai/sonarqube-linux-x64": "0.5.0",
+    "@pleaseai/sonarqube-win32-x64": "0.5.0"
   }
 }
