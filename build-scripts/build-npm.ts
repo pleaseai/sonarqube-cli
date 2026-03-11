@@ -26,7 +26,7 @@
  * Usage: bun build-scripts/build-npm.ts
  */
 
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
@@ -105,7 +105,16 @@ async function main(): Promise<void> {
     console.log(`Updated version in npm/${dir}/package.json`);
   }
 
-  console.log('');
+  // Copy README and LICENSE into npm packages (build artifacts, gitignored)
+  copyFileSync(join(PROJECT_ROOT, 'README.md'), join(PROJECT_ROOT, 'npm', 'sonarqube', 'README.md'));
+  copyFileSync(join(PROJECT_ROOT, 'LICENSE'), join(PROJECT_ROOT, 'npm', 'sonarqube', 'LICENSE'));
+  for (const platform of PLATFORMS) {
+    copyFileSync(
+      join(PROJECT_ROOT, 'LICENSE'),
+      join(PROJECT_ROOT, 'npm', platform.dir, 'LICENSE'),
+    );
+  }
+  console.log('Copied README.md and LICENSE into npm packages\n');
 
   // Build each platform binary
   for (const platform of PLATFORMS) {

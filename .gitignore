@@ -3,3 +3,6 @@ node_modules/
 .DS_Store
 npm/sonarqube-*/bin/sonar
 npm/sonarqube-*/bin/sonar.exe
+npm/sonarqube/README.md
+npm/sonarqube/LICENSE
+npm/sonarqube-*/LICENSE
