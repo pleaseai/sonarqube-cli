@@ -1,8 +1,12 @@
 node_modules/
 *.log
 .DS_Store
+.idea/
+.claude/settings.local.json
 npm/sonarqube-*/bin/sonar
 npm/sonarqube-*/bin/sonar.exe
+npm/sonarqube/bin/sonar.js
+npm/sonarqube/bin/*.node
 npm/sonarqube/README.md
 npm/sonarqube/LICENSE
 npm/sonarqube-*/LICENSE
