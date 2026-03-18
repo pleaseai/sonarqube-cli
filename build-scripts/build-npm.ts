@@ -65,6 +65,7 @@ async function buildBundle(): Promise<void> {
     format: 'esm',
     minify: false,
     packages: 'bundle',
+    external: ['keytar'],
   });
 
   if (!result.success) {
