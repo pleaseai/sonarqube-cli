@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
 /*
  * SonarQube CLI
@@ -20,67 +20,4 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-'use strict';
-
-const { execFileSync } = require('node:child_process');
-const { existsSync } = require('node:fs');
-const { resolve } = require('node:path');
-
-const PLATFORM_MAP = {
-  'darwin-arm64': '@pleaseai/sonarqube-darwin-arm64',
-  'darwin-x64': '@pleaseai/sonarqube-darwin-x64',
-  'linux-x64': '@pleaseai/sonarqube-linux-x64',
-  'linux-arm64': '@pleaseai/sonarqube-linux-arm64',
-  'win32-x64': '@pleaseai/sonarqube-win32-x64',
-};
-
-const BINARY_NAME = {
-  'win32-x64': 'sonar.exe',
-};
-
-function getBinaryPath() {
-  const key = `${process.platform}-${process.arch}`;
-  const pkgName = PLATFORM_MAP[key];
-
-  if (!pkgName) {
-    throw new Error(
-      `Unsupported platform: ${process.platform} ${process.arch}\n` +
-        `Supported platforms: ${Object.keys(PLATFORM_MAP).join(', ')}`
-    );
-  }
-
-  const binaryFile = BINARY_NAME[key] || 'sonar';
-
-  // Resolve the platform package relative to this file's node_modules
-  let pkgDir;
-  try {
-    pkgDir = resolve(require.resolve(`${pkgName}/package.json`), '..');
-  } catch {
-    throw new Error(
-      `Could not find platform package "${pkgName}".\n` +
-        `Try reinstalling: npm install @pleaseai/sonarqube`
-    );
-  }
-
-  const binaryPath = resolve(pkgDir, 'bin', binaryFile);
-
-  if (!existsSync(binaryPath)) {
-    throw new Error(
-      `Binary not found at "${binaryPath}".\n` +
-        `The package "${pkgName}" may be corrupted. Try reinstalling.`
-    );
-  }
-
-  return binaryPath;
-}
-
-try {
-  const binaryPath = getBinaryPath();
-  execFileSync(binaryPath, process.argv.slice(2), { stdio: 'inherit' });
-} catch (err) {
-  if (err.status != null) {
-    process.exit(err.status);
-  }
-  console.error(err.message);
-  process.exit(1);
-}
+import('./sonar.js');

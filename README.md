@@ -1,11 +1,15 @@
 # @pleaseai/sonarqube
 
-npm distribution of [SonarQube CLI](https://github.com/SonarSource/sonarqube-cli) for all major platforms, including macOS x64 (Intel).
+npm distribution of [SonarQube CLI](https://github.com/SonarSource/sonarqube-cli).
+
+## Prerequisites
+
+- [Bun](https://bun.sh/) runtime is required.
 
 ## Installation
 
 ```bash
-npm install -g @pleaseai/sonarqube
+bun install -g @pleaseai/sonarqube
 ```
 
 ## Usage
@@ -14,17 +18,11 @@ npm install -g @pleaseai/sonarqube
 sonar --help
 ```
 
-## Supported Platforms
+Or run without installing:
 
-| Platform | Package |
-|---|---|
-| macOS arm64 | `@pleaseai/sonarqube-darwin-arm64` |
-| macOS x64 | `@pleaseai/sonarqube-darwin-x64` |
-| Linux x64 | `@pleaseai/sonarqube-linux-x64` |
-| Linux arm64 | `@pleaseai/sonarqube-linux-arm64` |
-| Windows x64 | `@pleaseai/sonarqube-win32-x64` |
-
-Platform packages are installed automatically via npm's `optionalDependencies`.
+```bash
+bunx @pleaseai/sonarqube --help
+```
 
 ## About
 

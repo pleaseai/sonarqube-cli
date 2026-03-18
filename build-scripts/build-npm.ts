@@ -21,7 +21,7 @@
  */
 
 /**
- * Build all platform npm binaries for @pleaseai/sonarqube
+ * Build JS bundle for @pleaseai/sonarqube npm package
  *
  * Usage: bun build-scripts/build-npm.ts
  */
@@ -29,27 +29,9 @@
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { execSync } from 'node:child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = dirname(__dirname);
-
-interface Platform {
-  /** npm package directory name under npm/ */
-  dir: string;
-  /** bun --target value */
-  target: string;
-  /** output binary filename */
-  binary: string;
-}
-
-const PLATFORMS: Platform[] = [
-  { dir: 'sonarqube-darwin-arm64', target: 'bun-darwin-arm64', binary: 'sonar' },
-  { dir: 'sonarqube-darwin-x64', target: 'bun-darwin-x64', binary: 'sonar' },
-  { dir: 'sonarqube-linux-x64', target: 'bun-linux-x64', binary: 'sonar' },
-  { dir: 'sonarqube-linux-arm64', target: 'bun-linux-arm64', binary: 'sonar' },
-  { dir: 'sonarqube-win32-x64', target: 'bun-windows-x64', binary: 'sonar.exe' },
-];
 
 function readVersion(): string {
   if (process.env['PUBLISH_VERSION']) {
@@ -64,67 +46,55 @@ function updatePackageVersion(pkgDir: string, version: string): void {
   const pkgPath = join(pkgDir, 'package.json');
   const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as Record<string, unknown>;
   pkg['version'] = version;
-
-  // Update optionalDependencies versions if present
-  if (pkg['optionalDependencies'] && typeof pkg['optionalDependencies'] === 'object') {
-    const deps = pkg['optionalDependencies'] as Record<string, string>;
-    for (const key of Object.keys(deps)) {
-      deps[key] = version;
-    }
-  }
-
   writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
 }
 
-function buildPlatform(platform: Platform, version: string): void {
-  const binDir = join(PROJECT_ROOT, 'npm', platform.dir, 'bin');
-  const outfile = join(binDir, platform.binary);
+async function buildBundle(): Promise<void> {
+  const outDir = join(PROJECT_ROOT, 'npm', 'sonarqube', 'bin');
+  const outfile = join(outDir, 'sonar.js');
 
-  mkdirSync(binDir, { recursive: true });
+  mkdirSync(outDir, { recursive: true });
 
-  console.log(`Building ${platform.dir} (${platform.target})...`);
+  console.log('Building JS bundle...');
 
-  execSync(
-    `bun build sonarqube-cli/src/index.ts --compile --target=${platform.target} --outfile="${outfile}"`,
-    {
-      cwd: PROJECT_ROOT,
-      stdio: 'inherit',
-    },
-  );
+  const result = await Bun.build({
+    entrypoints: [join(PROJECT_ROOT, 'sonarqube-cli', 'src', 'index.ts')],
+    outdir: outDir,
+    naming: 'sonar.js',
+    target: 'bun',
+    format: 'esm',
+    minify: false,
+    packages: 'bundle',
+  });
+
+  if (!result.success) {
+    for (const log of result.logs) {
+      console.error(log);
+    }
+    throw new Error('Bundle build failed');
+  }
 
   console.log(`  -> ${outfile}`);
 }
 
 async function main(): Promise<void> {
   const version = readVersion();
-  console.log(`Building npm packages for version ${version}\n`);
+  console.log(`Building npm package for version ${version}\n`);
 
-  // Update versions in all npm package.json files
-  const allPackageDirs = ['sonarqube', ...PLATFORMS.map((p) => p.dir)];
+  // Update version in npm/sonarqube/package.json
+  const pkgDir = join(PROJECT_ROOT, 'npm', 'sonarqube');
+  updatePackageVersion(pkgDir, version);
+  console.log('Updated version in npm/sonarqube/package.json');
 
-  for (const dir of allPackageDirs) {
-    const pkgDir = join(PROJECT_ROOT, 'npm', dir);
-    updatePackageVersion(pkgDir, version);
-    console.log(`Updated version in npm/${dir}/package.json`);
-  }
+  // Copy README and LICENSE into npm package (build artifacts, gitignored)
+  copyFileSync(join(PROJECT_ROOT, 'README.md'), join(pkgDir, 'README.md'));
+  copyFileSync(join(PROJECT_ROOT, 'LICENSE'), join(pkgDir, 'LICENSE'));
+  console.log('Copied README.md and LICENSE into npm package\n');
 
-  // Copy README and LICENSE into npm packages (build artifacts, gitignored)
-  copyFileSync(join(PROJECT_ROOT, 'README.md'), join(PROJECT_ROOT, 'npm', 'sonarqube', 'README.md'));
-  copyFileSync(join(PROJECT_ROOT, 'LICENSE'), join(PROJECT_ROOT, 'npm', 'sonarqube', 'LICENSE'));
-  for (const platform of PLATFORMS) {
-    copyFileSync(
-      join(PROJECT_ROOT, 'LICENSE'),
-      join(PROJECT_ROOT, 'npm', platform.dir, 'LICENSE'),
-    );
-  }
-  console.log('Copied README.md and LICENSE into npm packages\n');
+  // Build JS bundle
+  await buildBundle();
 
-  // Build each platform binary
-  for (const platform of PLATFORMS) {
-    buildPlatform(platform, version);
-  }
-
-  console.log('\nAll platform binaries built successfully.');
+  console.log('\nBundle built successfully.');
 }
 
 main().catch((err: unknown) => {
