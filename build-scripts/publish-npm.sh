@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SonarQube CLI - Publish npm packages to registry
+# SonarQube CLI - Publish npm package to registry
 #
 # Usage:
 #   ./build-scripts/publish-npm.sh                        # publish stable (version from submodule)
@@ -29,14 +29,6 @@ if [[ "$DRY_RUN" == true ]]; then
   echo "Running in dry-run mode (no packages will be published)"
 fi
 
-PLATFORM_PACKAGES=(
-  "sonarqube-darwin-arm64"
-  "sonarqube-darwin-x64"
-  "sonarqube-linux-x64"
-  "sonarqube-linux-arm64"
-  "sonarqube-win32-x64"
-)
-
 # Step 1: Determine version
 # For prerelease tags, append -{tag}.1 suffix to upstream version
 UPSTREAM_VERSION=$(node -e "console.log(require('$PROJECT_ROOT/sonarqube-cli/package.json').version)")
@@ -53,26 +45,14 @@ echo ""
 echo "==> Installing submodule dependencies..."
 (cd "$PROJECT_ROOT/sonarqube-cli" && npm install --registry https://registry.npmjs.org --no-package-lock)
 
-# Step 3: Build all platform binaries
+# Step 3: Build JS bundle
 echo ""
-echo "==> Building all platform binaries..."
+echo "==> Building JS bundle..."
 bun "$SCRIPT_DIR/build-npm.ts"
 
-# Step 4: Publish platform packages
+# Step 4: Publish main package
 echo ""
-echo "==> Publishing platform packages..."
-for pkg in "${PLATFORM_PACKAGES[@]}"; do
-  echo "  Publishing @pleaseai/$pkg@${PUBLISH_VERSION}..."
-  if [[ "$DRY_RUN" == true ]]; then
-    npm publish "$NPM_DIR/$pkg" --access public --tag "$DIST_TAG" --dry-run
-  else
-    npm publish "$NPM_DIR/$pkg" --access public --tag "$DIST_TAG"
-  fi
-done
-
-# Step 5: Publish main package last
-echo ""
-echo "==> Publishing main package @pleaseai/sonarqube@${PUBLISH_VERSION}..."
+echo "==> Publishing @pleaseai/sonarqube@${PUBLISH_VERSION}..."
 if [[ "$DRY_RUN" == true ]]; then
   npm publish "$NPM_DIR/sonarqube" --access public --tag "$DIST_TAG" --dry-run
 else
@@ -80,4 +60,4 @@ else
 fi
 
 echo ""
-echo "All packages published successfully (tag: ${DIST_TAG})."
+echo "Package published successfully (tag: ${DIST_TAG})."
