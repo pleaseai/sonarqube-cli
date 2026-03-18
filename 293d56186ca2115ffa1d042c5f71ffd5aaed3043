@@ -1,0 +1,23 @@
+npm/sonarqube/.npmignore
+  3696b4470461a118 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.15",
+  "base_commit_sha": "293d56186ca2115ffa1d042c5f71ffd5aaed3043",
+  "prompts": {
+    "3696b4470461a118": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3642892d-f9d2-4d00-b720-9c8ba3e51338",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Minsu Lee <amond@amond.net>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 0,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}
