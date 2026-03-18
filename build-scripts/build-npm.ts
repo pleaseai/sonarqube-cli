@@ -37,7 +37,7 @@ function readVersion(): string {
   if (process.env['PUBLISH_VERSION']) {
     return process.env['PUBLISH_VERSION'];
   }
-  const pkgPath = join(PROJECT_ROOT, 'sonarqube-cli', 'package.json');
+  const pkgPath = join(PROJECT_ROOT, 'npm', 'sonarqube', 'package.json');
   const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as { version: string };
   return pkg.version;
 }

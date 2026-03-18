@@ -29,13 +29,13 @@ if [[ "$DRY_RUN" == true ]]; then
   echo "Running in dry-run mode (no packages will be published)"
 fi
 
-# Step 1: Determine version
-# For prerelease tags, append -{tag}.1 suffix to upstream version
-UPSTREAM_VERSION=$(node -e "console.log(require('$PROJECT_ROOT/sonarqube-cli/package.json').version)")
+# Step 1: Determine version from npm/sonarqube/package.json
+# For prerelease tags, append -{tag}.1 suffix
+NPM_VERSION=$(node -e "console.log(require('$NPM_DIR/sonarqube/package.json').version)")
 if [[ "$DIST_TAG" != "latest" ]]; then
-  export PUBLISH_VERSION="${UPSTREAM_VERSION}-${DIST_TAG}.1"
+  export PUBLISH_VERSION="${NPM_VERSION}-${DIST_TAG}.1"
 else
-  export PUBLISH_VERSION="${UPSTREAM_VERSION}"
+  export PUBLISH_VERSION="${NPM_VERSION}"
 fi
 echo "==> Version: ${PUBLISH_VERSION} (dist-tag: ${DIST_TAG})"
 
