@@ -1,0 +1,25 @@
+build-scripts/build-npm.ts
+  3696b4470461a118 40
+build-scripts/publish-npm.sh
+  3696b4470461a118 32,34,36,38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.15",
+  "base_commit_sha": "cde71f61690608d9241d416540d4e9aecb7f7463",
+  "prompts": {
+    "3696b4470461a118": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3642892d-f9d2-4d00-b720-9c8ba3e51338",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Minsu Lee <amond@amond.net>",
+      "messages": [],
+      "total_additions": 6,
+      "total_deletions": 6,
+      "accepted_lines": 5,
+      "overriden_lines": 0
+    }
+  }
+}
