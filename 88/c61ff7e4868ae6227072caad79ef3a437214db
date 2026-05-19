@@ -1,0 +1,19 @@
+npm/sonarqube/package.json
+  s_193577808b3db3::t_10c34cb5827dd2 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.9",
+  "base_commit_sha": "88c61ff7e4868ae6227072caad79ef3a437214db",
+  "prompts": {},
+  "sessions": {
+    "s_193577808b3db3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "11271128-57a5-4af5-9e46-925e755270cd",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Minsu Lee <amond@amond.net>"
+    }
+  }
+}
