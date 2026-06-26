@@ -1,0 +1,21 @@
+npm/sonarqube/package.json
+  s_8d5e059847ff3f::t_86517bbc060369 3
+sonarqube-cli
+  s_8d5e059847ff3f::t_fb22d2ee2fe62d 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "513f176c1930d2e308061fa4390aadf9cb31f3ee",
+  "prompts": {},
+  "sessions": {
+    "s_8d5e059847ff3f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81581b9f-c3d5-4e5d-bd7a-01911928d384",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Minsu Lee <minsu.lee@pleaseai.dev>"
+    }
+  }
+}
